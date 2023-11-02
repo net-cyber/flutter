@@ -17,12 +17,16 @@ class SwitchApp extends StatefulWidget {
 
 class _SwitchAppState extends State<SwitchApp> {
   bool isMaterial = true;
+  bool isCustomized = false;
   TargetPlatform platform = TargetPlatform.android;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData(
       platform: isMaterial ? TargetPlatform.android : TargetPlatform.iOS,
+      adaptations: <Adaptation<Object>>[
+        if (isCustomized) const _SwitchThemeAdaptation()
+      ]
     );
 
     return MaterialApp(
@@ -40,18 +44,26 @@ class _SwitchAppState extends State<SwitchApp> {
               },
               child: isMaterial ? const Text('Show cupertino style') : const Text('Show material style'),
             ),
+            OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  isCustomized = !isCustomized;
+                });
+              },
+              child: isCustomized ? const Text('Remove customization') : const Text('Add customization'),
+            ),
             const SizedBox(height: 20),
             const SwitchWithLabel(label: 'enabled', enabled: true),
             const SwitchWithLabel(label: 'disabled', enabled: false),
-            Theme(
-              data: theme.copyWith(
-                adaptations: <Adaptation<Object>>[ const _SwitchThemeAdaptation() ],
-              ),
-              child: const SwitchWithLabel(
-                label: 'customization for cupertino only',
-                enabled: true,
-              ),
-            ),
+            // Theme(
+            //   data: theme.copyWith(
+            //     adaptations: <Adaptation<Object>>[ const _SwitchThemeAdaptation() ],
+            //   ),
+            //   child: const SwitchWithLabel(
+            //     label: 'customization for cupertino only',
+            //     enabled: true,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -104,13 +116,24 @@ class _SwitchThemeAdaptation extends Adaptation<SwitchThemeData> {
   const _SwitchThemeAdaptation();
 
   @override
-  SwitchThemeData adapt(ThemeData theme, SwitchThemeData defaultValue) => SwitchThemeData(
-    thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
-      if (states.contains(MaterialState.selected)) {
-        return Colors.yellow;
-      }
-      return null; // Use the default.
-    }),
-    trackColor: const MaterialStatePropertyAll<Color>(Colors.brown),
-  );
+  SwitchThemeData adapt(ThemeData theme, SwitchThemeData defaultValue) {
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return defaultValue;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return SwitchThemeData(
+          thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+            if (states.contains(MaterialState.selected)) {
+              return Colors.yellow;
+            }
+            return null; // Use the default.
+          }),
+          trackColor: const MaterialStatePropertyAll<Color>(Colors.brown),
+        );
+    }
+  }
 }

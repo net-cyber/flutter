@@ -396,9 +396,7 @@ class ThemeData with Diagnosticable {
     // GENERAL CONFIGURATION
     cupertinoOverrideTheme = cupertinoOverrideTheme?.noDefault();
     extensions ??= <ThemeExtension<dynamic>>[];
-    adaptations ??= <Adaptation<Object>>[
-      const _SwitchThemeAdaptation(),
-    ];
+    adaptations ??= <Adaptation<Object>>[];
     inputDecorationTheme ??= const InputDecorationTheme();
     platform ??= defaultTargetPlatform;
     switch (platform) {
@@ -579,7 +577,7 @@ class ThemeData with Diagnosticable {
       // alphabetical by symbol name.
 
       // GENERAL CONFIGURATION
-      adaptationMap: _updateAdaptationMap(adaptations),
+      adaptationMap: _createAdaptationMap(adaptations),
       applyElevationOverlayColor: applyElevationOverlayColor,
       cupertinoOverrideTheme: cupertinoOverrideTheme,
       extensions: _themeExtensionIterableToMap(extensions),
@@ -901,26 +899,13 @@ class ThemeData with Diagnosticable {
   /// text geometry.
   factory ThemeData.fallback({bool? useMaterial3}) => ThemeData.light(useMaterial3: useMaterial3);
 
-  /// Applies the adaptation if there is one contained in the [adaptationMap].
+  /// Obtains the adaptation if there is one contained in the [adaptationMap].
   ///
-  /// For example, calling `Theme.of(context).adaptive(switchThemeData)` returns
-  /// an adaptive [SwitchThemeData].
-  T adaptive<T>(T defaultValue) {
-    final Adaptation<T>? adaptation = adaptationMap[T] as Adaptation<T>?;
+  /// For example, calling `Theme.of(context).getAdaptive(switchThemeData)` returns
+  /// a switch adaptation.
+  Adaptation<T>? getAdaptation<T>() => adaptationMap[T] as Adaptation<T>?;
 
-    switch (platform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return defaultValue;
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return adaptation?.adapt(this, defaultValue) ?? defaultValue;
-    }
-  }
-
-  static Map<Type, Adaptation<Object>> _updateAdaptationMap(Iterable<Adaptation<Object>> adaptations) {
+  static Map<Type, Adaptation<Object>> _createAdaptationMap(Iterable<Adaptation<Object>> adaptations) {
     final Map<Type, Adaptation<Object>> adaptationMap = <Type, Adaptation<Object>>{
       for (final Adaptation<Object> adaptation in adaptations)
         adaptation.type: adaptation
@@ -1681,7 +1666,7 @@ class ThemeData with Diagnosticable {
       // alphabetical by symbol name.
 
       // GENERAL CONFIGURATION
-      adaptationMap: adaptations != null ? _updateAdaptationMap(adaptations) : adaptationMap,
+      adaptationMap: adaptations != null ? _createAdaptationMap(adaptations) : adaptationMap,
       applyElevationOverlayColor: applyElevationOverlayColor ?? this.applyElevationOverlayColor,
       cupertinoOverrideTheme: cupertinoOverrideTheme ?? this.cupertinoOverrideTheme,
       extensions: (extensions != null) ? _themeExtensionIterableToMap(extensions) : this.extensions,
@@ -2691,13 +2676,6 @@ class VisualDensity with Diagnosticable {
   String toStringShort() {
     return '${super.toStringShort()}(h: ${debugFormatDouble(horizontal)}, v: ${debugFormatDouble(vertical)})';
   }
-}
-
-class _SwitchThemeAdaptation extends Adaptation<SwitchThemeData> {
-  const _SwitchThemeAdaptation();
-
-  @override
-  SwitchThemeData adapt(ThemeData theme, SwitchThemeData defaultValue) => const SwitchThemeData();
 }
 
 // BEGIN GENERATED TOKEN PROPERTIES - ColorScheme

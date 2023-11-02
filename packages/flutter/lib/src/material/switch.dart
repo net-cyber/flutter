@@ -557,7 +557,9 @@ class Switch extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     SwitchThemeData switchTheme = SwitchTheme.of(context);
     if (_switchType == _SwitchType.adaptive) {
-      switchTheme = theme.adaptive(switchTheme);
+      final Adaptation<SwitchThemeData> switchAdaptation = theme.getAdaptation<SwitchThemeData>()
+        ?? const _SwitchThemeAdaptation();
+      switchTheme = switchAdaptation.adapt(theme, switchTheme);
     }
     final _SwitchConfig switchConfig = theme.useMaterial3 ? _SwitchConfigM3(context) : _SwitchConfigM2();
 
@@ -869,7 +871,9 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
         switchConfig = theme.useMaterial3 ? _SwitchConfigM3(context) : _SwitchConfigM2();
         defaults = theme.useMaterial3 ? _SwitchDefaultsM3(context) : _SwitchDefaultsM2(context);
       case _SwitchType.adaptive:
-        switchTheme = theme.adaptive(switchTheme);
+        final Adaptation<SwitchThemeData> switchAdaptation = theme.getAdaptation<SwitchThemeData>()
+          ?? const _SwitchThemeAdaptation();
+        switchTheme = switchAdaptation.adapt(theme, switchTheme);
         switch (theme.platform) {
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
@@ -1741,6 +1745,24 @@ class _SwitchPainter extends ToggleablePainter {
     _cachedThumbImage = null;
     _cachedThumbErrorListener = null;
     super.dispose();
+  }
+}
+
+class _SwitchThemeAdaptation extends Adaptation<SwitchThemeData> {
+  const _SwitchThemeAdaptation();
+
+  @override
+  SwitchThemeData adapt(ThemeData theme, SwitchThemeData defaultValue) {
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return defaultValue;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return const SwitchThemeData();
+    }
   }
 }
 
