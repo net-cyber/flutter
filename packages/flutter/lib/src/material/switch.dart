@@ -2123,8 +2123,10 @@ class _SwitchDefaultsM3 extends SwitchThemeData {
   }
 
   @override
-  MaterialStateProperty<MouseCursor> get mouseCursor =>
-    MaterialStateProperty.resolveWith((Set<MaterialState> states) => MaterialStateMouseCursor.clickable.resolve(states));
+  MaterialStateProperty<MouseCursor> get mouseCursor {
+    return MaterialStateProperty.resolveWith((Set<MaterialState> states)
+      => MaterialStateMouseCursor.clickable.resolve(states));
+  }
 
   @override
   MaterialStatePropertyAll<double> get trackOutlineWidth => const MaterialStatePropertyAll<double>(2.0);

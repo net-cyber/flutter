@@ -88,12 +88,11 @@ class _SwitchWithLabelState extends State<SwitchWithLabel> {
         ),
         Switch.adaptive(
           value: active,
-          onChanged: widget.enabled ?
-            (bool value) {
-              setState(() {
-                active = value;
-              });
-            } : null,
+          onChanged: !widget.enabled ? null : (bool value) {
+            setState(() {
+              active = value;
+            });
+          },
         ),
       ],
     );
