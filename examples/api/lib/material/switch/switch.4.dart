@@ -27,6 +27,9 @@ class _SwitchAppState extends State<SwitchApp> {
         if (isCustomized) const _SwitchThemeAdaptation()
       ]
     );
+    final ButtonStyle style = OutlinedButton.styleFrom(
+      fixedSize: const Size(220, 40),
+    );
 
     return MaterialApp(
       theme: theme,
@@ -36,6 +39,7 @@ class _SwitchAppState extends State<SwitchApp> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             OutlinedButton(
+              style: style,
               onPressed: () {
                 setState(() {
                   isMaterial = !isMaterial;
@@ -44,6 +48,7 @@ class _SwitchAppState extends State<SwitchApp> {
               child: isMaterial ? const Text('Show cupertino style') : const Text('Show material style'),
             ),
             OutlinedButton(
+              style: style,
               onPressed: () {
                 setState(() {
                   isCustomized = !isCustomized;
