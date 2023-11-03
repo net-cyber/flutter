@@ -18,7 +18,6 @@ class SwitchApp extends StatefulWidget {
 class _SwitchAppState extends State<SwitchApp> {
   bool isMaterial = true;
   bool isCustomized = false;
-  TargetPlatform platform = TargetPlatform.android;
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +54,6 @@ class _SwitchAppState extends State<SwitchApp> {
             const SizedBox(height: 20),
             const SwitchWithLabel(label: 'enabled', enabled: true),
             const SwitchWithLabel(label: 'disabled', enabled: false),
-            // Theme(
-            //   data: theme.copyWith(
-            //     adaptations: <Adaptation<Object>>[ const _SwitchThemeAdaptation() ],
-            //   ),
-            //   child: const SwitchWithLabel(
-            //     label: 'customization for cupertino only',
-            //     enabled: true,
-            //   ),
-            // ),
           ],
         ),
       ),
