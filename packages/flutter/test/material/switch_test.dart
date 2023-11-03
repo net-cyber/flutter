@@ -4170,9 +4170,9 @@ Widget buildAdaptiveSwitch({
     theme: ThemeData(
       platform: platform,
       switchTheme: overallSwitchThemeData,
-      adaptations: switchThemeAdaptation != null ? <Adaptation<Object>>[
+      adaptations: switchThemeAdaptation == null ? null : <Adaptation<Object>>[
         switchThemeAdaptation
-      ] : null,
+      ],
     ),
     home: StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
@@ -4195,8 +4195,19 @@ class _SwitchThemeAdaptation extends Adaptation<SwitchThemeData> {
   const _SwitchThemeAdaptation();
 
   @override
-  SwitchThemeData adapt(ThemeData theme, SwitchThemeData defaultValue) => const SwitchThemeData(
-    thumbColor: MaterialStatePropertyAll<Color>(Colors.lightGreen),
-    trackColor: MaterialStatePropertyAll<Color>(Colors.deepPurple),
-  );
+  SwitchThemeData adapt(ThemeData theme, SwitchThemeData defaultValue) {
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.windows:
+      case TargetPlatform.linux:
+        return defaultValue;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return const SwitchThemeData(
+          thumbColor: MaterialStatePropertyAll<Color>(Colors.lightGreen),
+          trackColor: MaterialStatePropertyAll<Color>(Colors.deepPurple),
+        );
+    }
+  }
 }
