@@ -1311,8 +1311,8 @@ void main() {
       final ThemeData theme = Theme.of(
         tester.element(find.byKey(containerKey)),
       );
-      final String adaptiveString = theme.adaptation<String>()!.adapt(theme, 'Default theme');
-      final SwitchThemeData adaptiveSwitchTheme = theme.adaptation<SwitchThemeData>()!
+      final String adaptiveString = theme.getAdaptation<String>()!.adapt(theme, 'Default theme');
+      final SwitchThemeData adaptiveSwitchTheme = theme.getAdaptation<SwitchThemeData>()!
         .adapt(theme, theme.switchTheme);
 
       expect(adaptiveString, 'Adaptive theme.');

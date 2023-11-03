@@ -899,10 +899,9 @@ class ThemeData with Diagnosticable {
   /// text geometry.
   factory ThemeData.fallback({bool? useMaterial3}) => ThemeData.light(useMaterial3: useMaterial3);
 
-  /// Obtains the adaptation if there is one contained in the [adaptationMap].
+  /// Used to obtain a particular [Adaptation] from [adaptationMap].
   ///
-  /// For example, calling `Theme.of(context).getAdaptive(switchThemeData)` returns
-  /// a switch adaptation.
+  /// To get an adaptation, use `Theme.of(context).getAdaptation<MyAdaptation>()`.
   Adaptation<T>? getAdaptation<T>() => adaptationMap[T] as Adaptation<T>?;
 
   static Map<Type, Adaptation<Object>> _createAdaptationMap(Iterable<Adaptation<Object>> adaptations) {
@@ -1007,11 +1006,6 @@ class ThemeData with Diagnosticable {
   ///
   /// To obtain an adaptation, use [adaptation].
   final Map<Type, Adaptation<Object>> adaptationMap;
-
-  /// Used to obtain a particular [Adaptation] from [adaptationMap].
-  ///
-  /// To get an adaptation, use `Theme.of(context).adaptation<MyAdaptation>()`.
-  Adaptation<T>? adaptation<T>() => adaptationMap[T] as Adaptation<T>?;
 
   /// The default [InputDecoration] values for [InputDecorator], [TextField],
   /// and [TextFormField] are based on this theme.
