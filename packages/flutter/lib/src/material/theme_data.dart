@@ -1004,7 +1004,7 @@ class ThemeData with Diagnosticable {
   /// A map which contains the adaptations for the theme. The entry's key is the
   /// type of the adaptation; the value is the adaptation itself.
   ///
-  /// To obtain an adaptation, use [adaptation].
+  /// To obtain an adaptation, use [getAdaptation].
   final Map<Type, Adaptation<Object>> adaptationMap;
 
   /// The default [InputDecoration] values for [InputDecorator], [TextField],
